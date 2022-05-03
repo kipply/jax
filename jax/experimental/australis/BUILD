@@ -155,6 +155,17 @@ cc_library(
     alwayslink = 1,
 )
 
+cc_library(
+    name = "tpu_1vm_support",
+    srcs = ["tpu_1vm_support.cc"],
+    deps = [
+        ":client",
+        "@org_tensorflow//tensorflow/compiler/xla/pjrt:pjrt_client",
+        "@org_tensorflow//tensorflow/compiler/xla/pjrt:tpu_client",
+        "@org_tensorflow//tensorflow/core/tpu:tpu_api_dlsym_initializer",
+    ],
+    alwayslink = 1,
+)
 proto_library(
     name = "petri_proto",
     srcs = ["petri.proto"],
