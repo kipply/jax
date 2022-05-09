@@ -9,4 +9,5 @@ message ExecutableSpec {
   int64 num_replicas = 2;
   int64 num_partitions = 3;
   bool use_spmd_partitioning = 4;
+  bool tuple_args = 5;
 }

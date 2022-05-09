@@ -166,8 +166,9 @@ def serialize_executable_spec(fn):
     num_replicas = 1
     num_partitions = 1
     use_spmd = 0
+  tuple_args = fn._lowering.compile_args['tuple_args']
 
-  out += [0, num_replicas, num_partitions, use_spmd]
+  out += [0, num_replicas, num_partitions, use_spmd, 1 if tuple_args else 0]
   out.append(1)
 
   def encode_pytree(pytree):

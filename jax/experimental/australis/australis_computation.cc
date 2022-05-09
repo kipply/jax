@@ -16,6 +16,7 @@ struct ManualExecutableSpec {
   int64_t num_replicas = 1;
   int64_t num_partitions = 1;
   bool use_spmd_partitioning = false;
+  bool tuple_args = false;
   PTree out_tree;
 };
 
@@ -77,6 +78,12 @@ bool ReadFromStream(ManualExecutableSpec& out, CodedInputStream& stream) {
       if (value == 1) {
         out.use_spmd_partitioning = true;
       }
+      if (!stream.ReadLittleEndian32(&value)) {
+        return false;
+      }
+      if (value == 1) {
+        out.tuple_args = true;
+      }
     } else if (tag == 1) {
       if (!ReadFromStream(out.out_tree, stream)) {
         return false;
@@ -102,9 +109,9 @@ absl::StatusOr<AustralisComputation> AustralisComputation::LoadHlo(
                           "Could not parse executable spec proto.");
     }
 
-    auto executable =
-        client.Compile(spec.num_replicas(), spec.num_partitions(),
-                       spec.use_spmd_partitioning(), hlo_binary_text);
+    auto executable = client.Compile(spec.num_replicas(), spec.num_partitions(),
+                                     spec.use_spmd_partitioning(),
+                                     spec.tuple_args(), hlo_binary_text);
     if (!executable.ok()) return executable.status();
     return AustralisComputation(*std::move(executable),
                                 PTree::FromProto(spec.out_tree()));
@@ -115,9 +122,9 @@ absl::StatusOr<AustralisComputation> AustralisComputation::LoadHlo(
     ManualExecutableSpec spec;
     ReadFromStream(spec, stream);
 
-    auto executable =
-        client.Compile(spec.num_replicas, spec.num_partitions,
-                       spec.use_spmd_partitioning, hlo_binary_text);
+    auto executable = client.Compile(spec.num_replicas, spec.num_partitions,
+                                     spec.use_spmd_partitioning,
+                                     spec.tuple_args, hlo_binary_text);
     if (!executable.ok()) return executable.status();
     return AustralisComputation(*std::move(executable),
                                 std::move(spec.out_tree));
