@@ -42,7 +42,7 @@ class Client {
   // Compiles a replicated executable with optional spmd partitioning.
   absl::StatusOr<std::unique_ptr<Executable>> Compile(
       int num_replicas, int num_partitions, bool use_spmd_partitioning,
-      absl::string_view binary_proto);
+      bool tuple_args, absl::string_view binary_proto);
 
   // TODO(parkers): Remove once all use-cases are fully wrapped.
   xla::PjRtClient* client() const { return client_; }

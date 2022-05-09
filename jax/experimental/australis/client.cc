@@ -84,7 +84,7 @@ std::vector<Device> Client::LocalDevices() {
 
 absl::StatusOr<std::unique_ptr<Executable>> Client::Compile(
     int num_replicas, int num_partitions, bool use_spmd_partitioning,
-    absl::string_view binary_proto) {
+    bool tuple_args, absl::string_view binary_proto) {
   xla::HloModuleProto proto;
   if (!proto.ParsePartialFromArray(binary_proto.data(), binary_proto.size())) {
     return absl::Status(absl::StatusCode::kFailedPrecondition,
@@ -93,6 +93,7 @@ absl::StatusOr<std::unique_ptr<Executable>> Client::Compile(
 
   xla::XlaComputation computation(proto);
   xla::CompileOptions compile_options;
+  compile_options.parameter_is_tupled_arguments = tuple_args;
   compile_options.executable_build_options.set_num_replicas(num_replicas);
   compile_options.executable_build_options.set_num_partitions(num_partitions);
   compile_options.executable_build_options.set_use_spmd_partitioning(
