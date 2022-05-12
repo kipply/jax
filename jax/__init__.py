@@ -120,6 +120,7 @@ from jax._src.api import (
   xla_computation as xla_computation,
 )
 from jax.experimental.maps import soft_pmap as soft_pmap
+import jax.expremental.australis
 from jax.version import __version__ as __version__
 from jax.version import __version_info__ as __version_info__
 
