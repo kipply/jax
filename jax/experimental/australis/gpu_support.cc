@@ -1,14 +1,18 @@
-#include "third_party/py/jax/experimental/australis/client-private.h"
-#include "third_party/tensorflow/compiler/xla/pjrt/gpu_device.h"
+#include "jax/experimental/australis/client-private.h"
+#include "tensorflow/compiler/xla/pjrt/gpu_device.h"
 
 namespace aux {
 namespace internal {
+namespace {
 
 BackendFactoryRegister _register_gpu(
     "gpu", +[]() -> absl::StatusOr<std::shared_ptr<xla::PjRtClient>> {
-      return ToAbslStatusOr(xla::GetGpuClient(/*asynchronous=*/true, xla::GpuAllocatorConfig(),
-                          /*distributed_client=*/nullptr, /*node_id=*/0)
+      xla::GpuAllocatorConfig config;
+      config.preallocate = false;
+      return ToAbslStatusOr(
+          xla::GetGpuClient(true, config, nullptr, /*node_id=*/0));
     });
 
+}  // namespace
 }  // namespace internal
 }  // namespace aux

@@ -168,14 +168,15 @@ cc_library(
 )
 
 cc_library(
-    name = "gpu_support",
-    srcs = ["gpu_support.cc"],
-    deps = [
-        ":client",
-        "//third_party/tensorflow/compiler/xla/pjrt:pjrt_client",
-        "//third_party/tensorflow/compiler/xla/pjrt:gpu_device",
-    ],
-    alwayslink = 1,
+    name = "gpu_support",
+    srcs = ["gpu_support.cc"],
+    deps = [
+        ":client",
+        "@org_tensorflow//tensorflow/compiler/xla/pjrt:gpu_device",
+        "@org_tensorflow//tensorflow/compiler/xla/service:gpu_plugin",
+        "//jaxlib:gpu_kernels",
+    ],
+    alwayslink = 1,
 )
 
 proto_library(
