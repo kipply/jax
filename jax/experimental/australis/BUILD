@@ -166,6 +166,19 @@ cc_library(
     ],
     alwayslink = 1,
 )
+
+cc_library(
+    name = "gpu_support",
+    srcs = ["gpu_support.cc"],
+    deps = [
+        ":client",
+        "@org_tensorflow//tensorflow/compiler/xla/pjrt:gpu_device",
+        "@org_tensorflow//tensorflow/compiler/xla/service:gpu_plugin",
+        "//jaxlib:gpu_kernels",
+    ],
+    alwayslink = 1,
+)
+
 proto_library(
     name = "petri_proto",
     srcs = ["petri.proto"],

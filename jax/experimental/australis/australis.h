@@ -9,8 +9,11 @@
 
 #include "absl/container/inlined_vector.h"
 #include "absl/types/optional.h"
+#include "third_party/eigen3/Eigen/Core"
 
 namespace aux {
+
+using bfloat16 = Eigen::bfloat16;
 
 enum class PrimitiveType {
   PRIMITIVE_TYPE_INVALID = 0,
@@ -83,6 +86,7 @@ DEFINE_CPP_TO_PRIMITIVE_MAPPING(uint64_t, U64);
 
 DEFINE_CPP_TO_PRIMITIVE_MAPPING(double, F64);
 DEFINE_CPP_TO_PRIMITIVE_MAPPING(float, F32);
+DEFINE_CPP_TO_PRIMITIVE_MAPPING(bfloat16, BF16);
 
 #undef DEFINE_CPP_TO_PRIMITIVE_MAPPING
 
